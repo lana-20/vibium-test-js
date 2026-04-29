@@ -253,6 +253,31 @@ test.sync.only('sync only', ({ page }) => { ... });
 test.sync.skip('sync skip', ({ page }) => { ... });
 ```
 
+## Parallel execution
+
+Parallelism is controlled by Vitest. The framework handles the rest: one browser per worker, one isolated `BrowserContext` per test.
+
+```ts
+// vitest.config.ts
+export default defineConfig({
+  test: {
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        maxForks: 4, // 4 browsers running concurrently
+      },
+    },
+    setupFiles: ['vibium-test-js/vitest.setup'],
+  },
+});
+```
+
+- `maxForks: 1` — single browser, tests run serially (useful for debugging)
+- `maxForks: 4` — safe default for most machines
+- Don't exceed your CPU core count — each worker runs a real Chrome process
+
+For `test.sync()`, use `pool: 'threads'` and `maxThreads` instead of `maxForks`.
+
 ## License
 
 Apache-2.0
