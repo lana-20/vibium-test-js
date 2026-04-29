@@ -345,6 +345,34 @@ export default defineConfig({
 
 For `test.sync()`, use `pool: 'threads'` and `maxThreads` instead of `maxForks`.
 
+## HTML report
+
+Run the full suite and generate a self-contained HTML report in one command:
+
+```sh
+npm run report
+```
+
+This runs all tests with JSON output (`test-results/results.json`) and then generates `test-report.html` — a single file you can open in any browser or attach to a ticket.
+
+```sh
+npm run test:ci    # tests only, JSON output (no report generation)
+npm run report     # tests + report
+```
+
+**What the report includes:**
+
+| Section | Details |
+|---|---|
+| Header | Project name, run timestamp, total duration, pass/fail badge |
+| Summary cards | Total · Passed · Failed · Skipped · Duration · Pass rate |
+| Progress bar | Visual pass-rate indicator, red/amber/green by threshold |
+| Test suites | Expandable accordion — click a suite to see individual test names and durations |
+| Failure detail | Failed suites auto-expand with full assertion error messages inlined |
+| Print / PDF | Print stylesheet renders cleanly — print to PDF to share |
+
+![Test report sample](docs/test-report-sample.png)
+
 ## License
 
 Apache-2.0
