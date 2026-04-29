@@ -1,0 +1,40 @@
+{
+  "name": "vibium-test-js",
+  "version": "0.1.0",
+  "description": "Test framework built on the Vibium JS client",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./vitest.setup": "./vitest.setup.ts",
+    "./jest.setup": "./jest.setup.ts"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "license": "Apache-2.0",
+  "peerDependencies": {
+    "vibium": ">=26.0.0 || file:../vibium-src/clients/javascript",
+    "vitest": ">=1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vitest": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.3.0",
+    "@types/node": "^20.0.0",
+    "jest": "^30.3.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0",
+    "vibium": "file:../vibium-src/clients/javascript",
+    "vitest": "^2.0.0"
+  }
+}
