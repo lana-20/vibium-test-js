@@ -12,10 +12,7 @@ test('content area shows waiting message initially', async ({ page }) => {
 test('load classified archives replaces placeholder with data', async ({ page }) => {
   await page.go(URL);
   await page.find('#load-async-data-btn').click();
-  await page.waitUntil(
-    `!document.querySelector('#dynamic-content-area')?.textContent.includes('Awaiting')`,
-    { timeout: 10000 },
-  );
+  await page.wait(5000);
   const area = await page.find('#dynamic-content-area');
   expect(await area.isVisible()).toBe(true);
   const text = await area.text();
@@ -26,10 +23,7 @@ test('load classified archives replaces placeholder with data', async ({ page })
 test('start monitoring shows active status in live feed', async ({ page }) => {
   await page.go(URL);
   await page.find('#start-monitoring-btn').click();
-  await page.waitUntil(
-    `document.querySelector('#live-status-feed')?.textContent.includes('MONITORING ACTIVE')`,
-    { timeout: 5000 },
-  );
+  await page.wait(5000);
   const feed = await page.find('#live-status-feed');
   await expect(feed).toHaveText('MONITORING ACTIVE');
 });
@@ -37,15 +31,9 @@ test('start monitoring shows active status in live feed', async ({ page }) => {
 test('stop monitoring button halts signal updates', async ({ page }) => {
   await page.go(URL);
   await page.find('#start-monitoring-btn').click();
-  await page.waitUntil(
-    `document.querySelector('#live-status-feed')?.textContent.includes('MONITORING ACTIVE')`,
-    { timeout: 5000 },
-  );
+  await page.wait(5000);
   await page.find('#stop-monitoring-btn').click();
-  await page.waitUntil(
-    `!document.querySelector('#live-status-feed')?.textContent.includes('MONITORING ACTIVE')`,
-    { timeout: 5000 },
-  );
+  await page.wait(2000);
   const feed = await page.find('#live-status-feed');
   expect(await feed.text()).not.toContain('MONITORING ACTIVE');
 });
@@ -53,10 +41,7 @@ test('stop monitoring button halts signal updates', async ({ page }) => {
 test('threat analysis produces a result', async ({ page }) => {
   await page.go(URL);
   await page.find('#threat-analysis-btn').click();
-  await page.waitUntil(
-    `document.body.textContent.includes('LEVEL')`,
-    { timeout: 8000 },
-  );
+  await page.wait(8000);
   const body = await page.evaluate<string>(`document.body.textContent`);
   expect(body).toMatch(/LEVEL\s*\d/);
 });

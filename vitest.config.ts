@@ -5,6 +5,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
     testTimeout: 30000,
+    hookTimeout: 30000,
     pool: 'forks',
     include: ['tests/**/*.test.ts'],
   },

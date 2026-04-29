@@ -8,7 +8,7 @@ test('valid credentials authenticate successfully', async ({ page }) => {
   await page.find('#username').fill('testuser');
   await page.find('#password').fill('password123');
   await page.find('#login-submit').click();
-  await page.waitUntil(`document.querySelector('#login-status')?.textContent === 'AUTHENTICATED'`, { timeout: 5000 });
+  await page.wait(4000);
   const status = await page.find('#login-status');
   await expect(status).toHaveText('AUTHENTICATED');
 });
@@ -18,7 +18,7 @@ test('invalid credentials show access denied', async ({ page }) => {
   await page.find('#username').fill('baduser');
   await page.find('#password').fill('wrongpass');
   await page.find('#login-submit').click();
-  await page.waitUntil(`document.querySelector('#login-status')?.textContent === 'ACCESS DENIED'`, { timeout: 5000 });
+  await page.wait(4000);
   const status = await page.find('#login-status');
   await expect(status).toHaveText('ACCESS DENIED');
 });
@@ -28,7 +28,7 @@ test('attempt counter increments on each submit', async ({ page }) => {
   await page.find('#username').fill('a');
   await page.find('#password').fill('b');
   await page.find('#login-submit').click();
-  await page.waitUntil(`document.querySelector('#login-attempts')?.textContent === '1'`, { timeout: 5000 });
+  await page.wait(4000);
   const attempts = await page.find('#login-attempts');
   await expect(attempts).toHaveText('1');
 });

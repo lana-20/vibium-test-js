@@ -6,7 +6,7 @@ const BASE = 'https://var.parts';
 async function addToCartAndGoToCheckout(page: import('vibium').Page) {
   await page.go(`${BASE}/product/3`);
   await page.find({ text: 'Add to Cart' }).click();
-  await page.waitUntil(`document.body.textContent.includes('Added to cart')`, { timeout: 4000 });
+  await page.wait(2000);
   await page.find('a[href="/cart"]').click();
   await page.waitUntil.url('/cart');
   await page.find('a[href="/checkout"]').click();
@@ -41,7 +41,7 @@ test('filling delivery form and submitting reaches payment page', async ({ page 
   await page.find('#name').fill('VAR-402');
   await page.find('#bay').fill('Bay 7-A');
   await page.find({ text: 'Proceed to Payment' }).click();
-  await page.waitUntil(`document.body.textContent.includes('Complete Payment')`, { timeout: 5000 });
+  await page.wait(5000);
   const body = await page.evaluate<string>(`document.body.textContent`);
   expect(body).toContain('Complete Payment');
   expect(body).toContain('VAR-402');
@@ -53,7 +53,7 @@ test('payment page has Pay Now button and order number', async ({ page }) => {
   await page.find('#name').fill('VAR-402');
   await page.find('#bay').fill('Bay 7-A');
   await page.find({ text: 'Proceed to Payment' }).click();
-  await page.waitUntil(`document.body.textContent.includes('Complete Payment')`, { timeout: 5000 });
+  await page.wait(5000);
   const btn = await page.find({ text: 'Pay Now' });
   await expect(btn).toBeVisible();
   await expect(btn).toBeEnabled();
@@ -66,9 +66,9 @@ test('paying shows order confirmation', async ({ page }) => {
   await page.find('#name').fill('VAR-402');
   await page.find('#bay').fill('Bay 7-A');
   await page.find({ text: 'Proceed to Payment' }).click();
-  await page.waitUntil(`document.body.textContent.includes('Complete Payment')`, { timeout: 5000 });
+  await page.wait(5000);
   await page.find({ text: 'Pay Now' }).click();
-  await page.waitUntil(`document.body.textContent.includes('Payment Received')`, { timeout: 5000 });
+  await page.wait(5000);
   const body = await page.evaluate<string>(`document.body.textContent`);
   expect(body).toContain('Payment Received');
   expect(body).toContain('Bay 7-A');

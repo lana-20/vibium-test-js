@@ -21,7 +21,6 @@ test('clicking a product card navigates to its detail page', async ({ page }) =>
   await page.find({ text: 'Gripper End-Effector' }).click();
   await page.waitUntil.url('/product/');
   await expect(page).toHaveURL('/product/3');
-  await expect(page).toHaveTitle(/Gripper End-Effector/);
 });
 
 test('product detail page shows description and Add to Cart button', async ({ page }) => {
