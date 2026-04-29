@@ -271,6 +271,46 @@ test-results/
   recordings/ # Session ZIP files (recordOnFailure: true)
 ```
 
+## Running tests
+
+**All tests**
+```sh
+npm test
+```
+
+**Specific file**
+```sh
+npx vitest run tests/varparts-cart.test.ts
+```
+
+**Files matching a pattern**
+```sh
+npx vitest run tests/varparts
+npx vitest run tests/login
+```
+
+**One test by name** (substring match)
+```sh
+npx vitest run -t "cart is empty on initial visit"
+npx vitest run -t "valid credentials"
+```
+
+**File + name combined**
+```sh
+npx vitest run tests/varparts-cart.test.ts -t "clear cart"
+```
+
+**Watch mode** (re-runs on file save)
+```sh
+npm run test:watch
+npx vitest tests/varparts-cart.test.ts   # watch a single file
+```
+
+**Only marked tests** — add `test.only()` in the file, no extra flag needed:
+```ts
+test.only('run only this test', async ({ page }) => { ... });
+```
+
 ## Test modifiers
 
 ```ts
