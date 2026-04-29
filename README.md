@@ -14,7 +14,7 @@ A test framework built on the [Vibium](https://github.com/VibiumDev/vibium) JS b
 
 ## Apps under test
 
-### [testtrack.org](https://testtrack.org) — 23 tests
+### [testtrack.org](https://testtrack.org) — 29 tests
 
 A browser automation training facility with 15 interactive modules.
 
@@ -27,7 +27,7 @@ A browser automation training facility with 15 interactive modules.
 | `checkbox-radio-demo.test.ts` | 6 | Toggle, double-toggle, radio exclusivity, independent checkboxes |
 | `dynamic-demo.test.ts` | 5 | Placeholder state, async archive load, monitoring start/stop, threat analysis |
 
-### [var.parts](https://var.parts) — 20 tests
+### [var.parts](https://var.parts) — 21 tests
 
 A test e-commerce storefront for Vibium Automation Robot parts.
 
@@ -35,7 +35,7 @@ A test e-commerce storefront for Vibium Automation Robot parts.
 |---|---|---|
 | `varparts-shop.test.ts` | 7 | Product grid (12 items), card content, product detail page, nav, about/FAQ |
 | `varparts-cart.test.ts` | 7 | Empty cart, add-to-cart toast, nav badge, cart contents, subtotal, clear, multi-item |
-| `varparts-checkout.test.ts` | 6 | Delivery form, shipping options, order summary, payment page, order confirmation |
+| `varparts-checkout.test.ts` | 7 | Delivery form, shipping options, order summary, payment page, order confirmation |
 
 > **Note:** var.parts cart is React state (not server-persisted). Tests navigate via SPA links after adding items — direct `page.go('/cart')` loses cart state.
 
