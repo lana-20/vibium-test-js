@@ -167,9 +167,30 @@ test('wrong password shows error', async ({ page }) => {
 });
 ```
 
-## Sync API
+## Sync vs async
 
-Uses Vibium's `BrowserSync` (blocking calls via `SharedArrayBuffer` + `Atomics.wait`). Requires Vitest `pool: 'threads'` — sync tests cannot run in forked processes.
+**Use `test()` (async) by default.** It works with Vitest `pool: 'forks'`, is compatible with Jest, and is what most browser test suites use.
+
+**Use `test.sync()` only when** you need blocking calls — for example, integrating with a legacy codebase, a CLI script, or any context where `await` is not available.
+
+| | `test()` | `test.sync()` |
+|---|---|---|
+| Syntax | `async/await` | synchronous (blocking) |
+| Vitest pool | `forks` (default) | `threads` (required) |
+| Jest | yes | yes |
+| Vibium API | `Page`, `BrowserContext` | `PageSync`, `BrowserSync` |
+
+`test.sync()` uses `Atomics.wait` under the hood, which blocks the thread. It cannot run in a forked process — set `pool: 'threads'` in your Vitest config when using it.
+
+```ts
+// vitest.config.ts — required for test.sync()
+export default defineConfig({
+  test: {
+    pool: 'threads',
+    setupFiles: ['vibium-test-js/vitest.setup'],
+  },
+});
+```
 
 ```ts
 import { test } from 'vibium-test-js';
