@@ -12,6 +12,33 @@ A test framework built on the [Vibium](https://github.com/VibiumDev/vibium) JS b
 - **Test-level retries** — retries on `BrowserCrashedError` / `ConnectionError` only (max 2)
 - **Auth reuse** — pre-load storage state via `storageState` config option
 
+## Apps under test
+
+### [testtrack.org](https://testtrack.org) — 23 tests
+
+A browser automation training facility with 15 interactive modules.
+
+| File | Tests | Covers |
+|---|---|---|
+| `button-demo.test.ts` | 5 | Counter increments, activated state, disabled button, reset |
+| `login-demo.test.ts` | 5 | Valid auth → AUTHENTICATED, invalid → ACCESS DENIED, demo credentials, reset |
+| `dropdown-demo.test.ts` | 3 | Native select value, option switching, reset to default |
+| `modal-demo.test.ts` | 5 | Dialog open/close (two paths), interaction counter, form modal |
+| `checkbox-radio-demo.test.ts` | 6 | Toggle, double-toggle, radio exclusivity, independent checkboxes |
+| `dynamic-demo.test.ts` | 5 | Placeholder state, async archive load, monitoring start/stop, threat analysis |
+
+### [var.parts](https://var.parts) — 20 tests
+
+A test e-commerce storefront for Vibium Automation Robot parts.
+
+| File | Tests | Covers |
+|---|---|---|
+| `varparts-shop.test.ts` | 7 | Product grid (12 items), card content, product detail page, nav, about/FAQ |
+| `varparts-cart.test.ts` | 7 | Empty cart, add-to-cart toast, nav badge, cart contents, subtotal, clear, multi-item |
+| `varparts-checkout.test.ts` | 6 | Delivery form, shipping options, order summary, payment page, order confirmation |
+
+> **Note:** var.parts cart is React state (not server-persisted). Tests navigate via SPA links after adding items — direct `page.go('/cart')` loses cart state.
+
 ## Installation
 
 ```sh
