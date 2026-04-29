@@ -16,7 +16,9 @@
   },
   "scripts": {
     "build": "tsup",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "license": "Apache-2.0",
   "peerDependencies": {
