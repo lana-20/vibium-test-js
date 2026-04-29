@@ -1,5 +1,5 @@
 {
-  "name": "vibium-test-sync-js",
+  "name": "vibium-test-js",
   "version": "0.1.0",
   "description": "Test framework built on the Vibium JS client",
   "main": "./dist/index.js",
