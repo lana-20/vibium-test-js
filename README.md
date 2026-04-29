@@ -39,6 +39,16 @@ A test e-commerce storefront for Vibium Automation Robot parts.
 
 > **Note:** var.parts cart is React state (not server-persisted). Tests navigate via SPA links after adding items — direct `page.go('/cart')` loses cart state.
 
+### [the-internet.herokuapp.com/shadowdom](https://the-internet.herokuapp.com/shadowdom) — 8 tests
+
+A live shadow DOM demo with two `<my-paragraph>` custom elements using open shadow roots and slot-based content projection.
+
+| File | Tests | Covers |
+|---|---|---|
+| `shadow-dom.test.ts` | 8 | Shadow host count, open mode, default text, scoped styles, slot projection (span + list), CSS encapsulation, shared structure |
+
+> **Note:** vibium CSS selectors do not pierce shadow roots. All shadow DOM access uses `page.evaluate()` with `element.shadowRoot`. Nested arrays from evaluate must be round-tripped through `JSON.stringify` / `JSON.parse` to avoid BiDi typed-value wrapping.
+
 ## Installation
 
 ```sh
