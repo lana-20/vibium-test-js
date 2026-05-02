@@ -195,6 +195,17 @@ const ts = await page.evaluate<number>('Date.now()');
 
 Playwright's `page.clock.setFixedTime()` works standalone — `install()` is not required. Vibium should match this behaviour, or at minimum throw an error when called without `install()`.
 
+### Repro file
+
+`tests/repro-bug3-clock-setfixedtime.test.ts`
+
+Run with:
+```sh
+VIBIUM_BIN_PATH=<path-to-vibium-binary> npx vitest run tests/repro-bug3-clock-setfixedtime.test.ts
+```
+
+Expected result: 1 pass (workaround), 1 fail (the bug case).
+
 ---
 
 ## Bug 4 — `capture.navigation()` and `page.url()` miss SPA `history.pushState()` navigation
@@ -249,6 +260,17 @@ Chrome 123+ added `browsingContext.historyUpdated` specifically for pushState/re
 ### Impact
 
 Any test against a React Router, Vue Router, Angular Router, or Next.js (client-side transition) app cannot use `capture.navigation()` to wait for route changes. Tests must fall back to fixed `page.wait(ms)` delays or poll via `waitUntil`.
+
+### Repro file
+
+`tests/repro-bug4-spa-navigation.test.ts`
+
+Run with:
+```sh
+VIBIUM_BIN_PATH=<path-to-vibium-binary> npx vitest run tests/repro-bug4-spa-navigation.test.ts
+```
+
+Expected result: 1 pass (baseline), 2 fail (the two bug cases).
 
 ---
 
@@ -339,5 +361,7 @@ https://github.com/lana-20/vibium-test-js
 |---|---|
 | `tests/repro-bug1-waituntil-expression.test.ts` | Bug 1 — waitUntil expression timeout |
 | `tests/repro-bug2-evaluate-nested-array.test.ts` | Bug 2 — nested array BiDi deserialization |
+| `tests/repro-bug3-clock-setfixedtime.test.ts` | Bug 3 — clock.setFixedTime() without install |
+| `tests/repro-bug4-spa-navigation.test.ts` | Bug 4 — capture.navigation() / page.url() miss pushState |
 | `tests/repro-enhancement-shadow-pierce.test.ts` | Enhancement — pierce selector proposal |
 | `tests/shadow-dom.test.ts` | Production shadow DOM tests (all workarounds applied) |
