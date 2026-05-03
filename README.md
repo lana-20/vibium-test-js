@@ -47,7 +47,7 @@ A live shadow DOM demo with two `<my-paragraph>` custom elements using open shad
 |---|---|---|
 | `shadow-dom.test.ts` | 8 | Shadow host count, open mode, default text, scoped styles, slot projection (span + list), CSS encapsulation, shared structure |
 
-> **Note:** vibium CSS selectors do not pierce shadow roots. All shadow DOM access uses `page.evaluate()` with `element.shadowRoot`. Nested arrays from evaluate must be round-tripped through `JSON.stringify` / `JSON.parse` to avoid BiDi typed-value wrapping.
+> **Note:** vibium CSS selectors do not pierce shadow roots ([VibiumDev/vibium#118](https://github.com/VibiumDev/vibium/issues/118)). All shadow DOM access uses `page.evaluate()` with `element.shadowRoot`. Nested arrays from evaluate must be round-tripped through `JSON.stringify` / `JSON.parse` to avoid BiDi typed-value wrapping ([VibiumDev/vibium#124](https://github.com/VibiumDev/vibium/issues/124)).
 
 ## Installation
 
