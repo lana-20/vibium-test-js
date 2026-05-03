@@ -1,6 +1,6 @@
 /**
  * Coverage: waitUntil.url, waitUntil.loaded, waitUntil(expression), wait
- * Bug 1 (issue #118): waitUntil(expression) always times out — tests marked test.skip
+ * Bug 1 (VibiumDev/vibium#123): waitUntil(expression) always times out — tests marked test.skip
  */
 import { expect } from 'vitest';
 import { test } from '../src';

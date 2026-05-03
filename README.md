@@ -390,10 +390,10 @@ done
 | input | 15 | 15 | 0 |
 | recording | 3 | 3 | 0 |
 
-**Known bugs (issue #118):**
-- `waitUntil(expression)` string match — skipped in `api-wait.test.ts`
-- `waitUntil(expression)` numeric value — skipped in `api-wait.test.ts`
-- `evaluate` nested `string[][]` native (workaround via `JSON.stringify` passes) — skipped in `api-evaluate.test.ts`
+**Known bugs:**
+- `waitUntil(expression)` string match — skipped in `api-wait.test.ts` ([VibiumDev/vibium#123](https://github.com/VibiumDev/vibium/issues/123))
+- `waitUntil(expression)` numeric value — skipped in `api-wait.test.ts` ([VibiumDev/vibium#123](https://github.com/VibiumDev/vibium/issues/123))
+- `evaluate` nested `string[][]` native (workaround via `JSON.stringify` passes) — skipped in `api-evaluate.test.ts` ([VibiumDev/vibium#124](https://github.com/VibiumDev/vibium/issues/124))
 
 **Known teardown warning:**
 - `api-network.test.ts`: unhandled rejection `timeout: session closed` fires after all tests pass. Race in the vibium BiDi layer; harmless.

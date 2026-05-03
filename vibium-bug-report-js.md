@@ -10,7 +10,7 @@
 
 ---
 
-## Bug 1 — `page.waitUntil(expression)` always times out
+## Bug 1 — `page.waitUntil(expression)` always times out *(VibiumDev/vibium#123)*
 
 ### Summary
 
@@ -80,7 +80,7 @@ Expected result: 1 pass (baseline), 2 fail (the two bug cases).
 
 ---
 
-## Bug 2 — `page.evaluate()` wraps nested array strings as BiDi typed objects
+## Bug 2 — `page.evaluate()` wraps nested array strings as BiDi typed objects *(VibiumDev/vibium#124)*
 
 ### Summary
 
@@ -150,7 +150,7 @@ Expected result: 2 pass (baseline + workaround), 1 fail (the bug case).
 
 ---
 
-## Bug 3 — `clock.setFixedTime()` silently does nothing without prior `clock.install()`
+## Bug 3 — `clock.setFixedTime()` silently does nothing without prior `clock.install()` *(VibiumDev/vibium#125)*
 
 ### Summary
 
@@ -208,7 +208,7 @@ Expected result: 1 pass (workaround), 1 fail (the bug case).
 
 ---
 
-## Bug 4 — `capture.navigation()` and `page.url()` miss SPA `history.pushState()` navigation
+## Bug 4 — `capture.navigation()` and `page.url()` miss SPA `history.pushState()` navigation *(VibiumDev/vibium#126)*
 
 ### Summary
 
@@ -274,7 +274,7 @@ Expected result: 1 pass (baseline), 2 fail (the two bug cases).
 
 ---
 
-## Enhancement — Pierce selector support for shadow DOM
+## Enhancement — Pierce selector support for shadow DOM *(VibiumDev/vibium#118)*
 
 ### Summary
 

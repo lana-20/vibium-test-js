@@ -1,6 +1,6 @@
 /**
  * Coverage: evaluate — string, number, boolean, object, flat array, nested array
- * Bug 2 (issue #118): nested string[][] inner strings deserialize as {type,value} — test marked test.skip
+ * Bug 2 (VibiumDev/vibium#124): nested string[][] inner strings deserialize as {type,value} — test marked test.skip
  */
 import { expect } from 'vitest';
 import { test } from '../src';
