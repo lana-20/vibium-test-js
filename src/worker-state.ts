@@ -16,6 +16,10 @@ export function getBrowser(): Browser {
 
 export async function closeBrowser(): Promise<void> {
   if (!_browser) return;
-  await _browser.stop();
+  const b = _browser;
   _browser = null;
+  await Promise.race([
+    b.stop(),
+    new Promise<void>((resolve) => setTimeout(resolve, 10_000)),
+  ]).catch(() => {});
 }

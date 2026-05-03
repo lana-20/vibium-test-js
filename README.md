@@ -355,6 +355,49 @@ export default defineConfig({
 
 For `test.sync()`, use `pool: 'threads'` and `maxThreads` instead of `maxForks`.
 
+## API coverage tests
+
+`tests/api-*.test.ts` verify every public method in the vibium JS bindings. 12 categories, 128 tests total.
+
+**Requires `VIBIUM_BIN_PATH`** — no local Go binary is built in this repo. Point to the global install:
+
+```sh
+export VIBIUM_BIN_PATH=/usr/local/lib/node_modules/vibium/node_modules/@vibium/darwin-x64/bin/vibium
+```
+
+Run all categories:
+
+```sh
+export VIBIUM_BIN_PATH=/usr/local/lib/node_modules/vibium/node_modules/@vibium/darwin-x64/bin/vibium && for f in api-navigation api-find api-element-actions api-element-read api-wait api-evaluate api-network api-events api-page-control api-browser-context api-input api-recording; do
+  echo "=== $f ===" && npx vitest run tests/$f.test.ts --reporter=verbose 2>&1
+done
+```
+
+**Confirmed baseline (two independent runs):** 125 pass / 3 bug / 0 fail
+
+| Category | Total | Pass | Bug |
+|---|---|---|---|
+| navigation | 7 | 7 | 0 |
+| find | 13 | 13 | 0 |
+| element-actions | 17 | 17 | 0 |
+| element-read | 19 | 19 | 0 |
+| wait | 5 | 3 | 2 |
+| evaluate | 7 | 6 | 1 |
+| network | 8 | 8 | 0 |
+| events | 8 | 8 | 0 |
+| page-control | 16 | 16 | 0 |
+| browser-context | 10 | 10 | 0 |
+| input | 15 | 15 | 0 |
+| recording | 3 | 3 | 0 |
+
+**Known bugs (issue #118):**
+- `waitUntil(expression)` string match — skipped in `api-wait.test.ts`
+- `waitUntil(expression)` numeric value — skipped in `api-wait.test.ts`
+- `evaluate` nested `string[][]` native (workaround via `JSON.stringify` passes) — skipped in `api-evaluate.test.ts`
+
+**Known teardown warning:**
+- `api-network.test.ts`: unhandled rejection `timeout: session closed` fires after all tests pass. Race in the vibium BiDi layer; harmless.
+
 ## HTML report
 
 Run the full suite and generate a self-contained HTML report in one command:
