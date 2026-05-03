@@ -357,7 +357,7 @@ For `test.sync()`, use `pool: 'threads'` and `maxThreads` instead of `maxForks`.
 
 ## API coverage tests
 
-`tests/api-*.test.ts` verify every public method in the vibium JS bindings. 12 categories, 128 tests total.
+`tests/api-*.test.ts` verify every public method in the vibium JS bindings. 12 categories, 128 tests total. Automated via the [vibium-js-api-test](https://github.com/lana-20/vibium-js-api-test) Claude Code skill.
 
 **Requires `VIBIUM_BIN_PATH`** — no local Go binary is built in this repo. Point to the global install:
 
