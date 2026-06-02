@@ -1,6 +1,6 @@
 ---
-name: vibium-js-api-test
-description: Run the Vibium JS API coverage test suite category by category. Tests all methods across Page, Element, Browser, BrowserContext, Keyboard, Mouse, Touch, Clock, and Recording APIs using the vibium-test-js framework. Labels PASS/FAIL/BUG/SKIP per test.
+name: vibium-js-test
+description: Run the Vibium JS API coverage test suite category by category. Tests all methods across Page, Element, Browser, BrowserContext, Keyboard, Mouse, Touch, Clock, and Recording APIs using the vibium-js-test framework. Labels PASS/FAIL/BUG/SKIP per test.
 ---
 
 # Vibium JS API Coverage Test Suite

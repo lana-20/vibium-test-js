@@ -1,4 +1,4 @@
-# vibium-test-js
+# vibium-js-test
 
 A test framework built on the [Vibium](https://github.com/VibiumDev/vibium) JS browser automation client. Provides isolated browser fixtures, custom matchers, failure artifacts, and sync/async test APIs — compatible with both Vitest and Jest.
 
@@ -52,7 +52,7 @@ A live shadow DOM demo with two `<my-paragraph>` custom elements using open shad
 ## Installation
 
 ```sh
-npm install vibium-test-js vibium
+npm install vibium-js-test vibium
 ```
 
 ## Quick start
@@ -66,7 +66,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     globals: true,
-    setupFiles: ['vibium-test-js/vitest.setup'],
+    setupFiles: ['vibium-js-test/vitest.setup'],
     testTimeout: 60_000,
     pool: 'forks',
   },
@@ -75,7 +75,7 @@ export default defineConfig({
 
 ```ts
 // vibium.config.ts
-import { defineConfig } from 'vibium-test-js';
+import { defineConfig } from 'vibium-js-test';
 
 export default defineConfig({
   baseURL: 'https://example.com',
@@ -86,7 +86,7 @@ export default defineConfig({
 
 ```ts
 // login.test.ts
-import { test } from 'vibium-test-js';
+import { test } from 'vibium-js-test';
 import { expect } from 'vitest';
 
 test('successful login navigates to dashboard', async ({ page }) => {
@@ -104,14 +104,14 @@ test('successful login navigates to dashboard', async ({ page }) => {
 // jest.config.ts
 export default {
   preset: 'ts-jest',
-  setupFilesAfterFramework: ['vibium-test-js/jest.setup'],
+  setupFilesAfterFramework: ['vibium-js-test/jest.setup'],
   testTimeout: 60_000,
 };
 ```
 
 ```ts
 // login.test.ts
-import { test } from 'vibium-test-js';
+import { test } from 'vibium-js-test';
 import { expect } from '@jest/globals';
 
 test('successful login navigates to dashboard', async ({ page }) => {
@@ -184,7 +184,7 @@ await expect(items).toHaveCount(3);
 ## Page Object pattern
 
 ```ts
-import { test, PageObject } from 'vibium-test-js';
+import { test, PageObject } from 'vibium-js-test';
 import type { Page } from 'vibium';
 
 class LoginPage extends PageObject {
@@ -224,13 +224,13 @@ test('wrong password shows error', async ({ page }) => {
 export default defineConfig({
   test: {
     pool: 'threads',
-    setupFiles: ['vibium-test-js/vitest.setup'],
+    setupFiles: ['vibium-js-test/vitest.setup'],
   },
 });
 ```
 
 ```ts
-import { test } from 'vibium-test-js';
+import { test } from 'vibium-js-test';
 
 test.sync('cart total updates after removal', ({ page }) => {
   page.go('/cart');
@@ -262,7 +262,7 @@ await browser.stop();
 
 ```ts
 // vibium.config.ts
-import { defineConfig } from 'vibium-test-js';
+import { defineConfig } from 'vibium-js-test';
 import storageState from './auth.json';
 
 export default defineConfig({
@@ -344,7 +344,7 @@ export default defineConfig({
         maxForks: 4, // 4 browsers running concurrently
       },
     },
-    setupFiles: ['vibium-test-js/vitest.setup'],
+    setupFiles: ['vibium-js-test/vitest.setup'],
   },
 });
 ```
