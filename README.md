@@ -373,7 +373,7 @@ export VIBIUM_BIN_PATH=/usr/local/lib/node_modules/vibium/node_modules/@vibium/d
 done
 ```
 
-**Confirmed baseline (two independent runs):** 125 pass / 3 bug / 0 fail
+**v26.5.31 baseline: 127 pass / 1 bug / 0 fail** (was 125/3/0 on v26.3.18 — Bug 1 fixed by #163)
 
 | Category | Total | Pass | Bug |
 |---|---|---|---|
@@ -381,7 +381,7 @@ done
 | find | 13 | 13 | 0 |
 | element-actions | 17 | 17 | 0 |
 | element-read | 19 | 19 | 0 |
-| wait | 5 | 3 | 2 |
+| wait | 5 | 5 | 0 |
 | evaluate | 7 | 6 | 1 |
 | network | 8 | 8 | 0 |
 | events | 8 | 8 | 0 |
@@ -391,9 +391,10 @@ done
 | recording | 3 | 3 | 0 |
 
 **Known bugs:**
-- `waitUntil(expression)` string match — skipped in `api-wait.test.ts` ([VibiumDev/vibium#123](https://github.com/VibiumDev/vibium/issues/123))
-- `waitUntil(expression)` numeric value — skipped in `api-wait.test.ts` ([VibiumDev/vibium#123](https://github.com/VibiumDev/vibium/issues/123))
-- `evaluate` nested `string[][]` native (workaround via `JSON.stringify` passes) — skipped in `api-evaluate.test.ts` ([VibiumDev/vibium#124](https://github.com/VibiumDev/vibium/issues/124))
+- `evaluate` nested `string[][]` — inner strings still wrapped as BiDi `{type, value}` objects; workaround via `JSON.stringify` passes — skipped in `api-evaluate.test.ts` ([VibiumDev/vibium#124](https://github.com/VibiumDev/vibium/issues/124))
+
+**Fixed in v26.5.31:**
+- `waitUntil(expression)` bare expressions — fixed by PR #163; both `api-wait.test.ts` bug1 tests now PASS ([VibiumDev/vibium#123](https://github.com/VibiumDev/vibium/issues/123))
 
 **Known teardown warning:**
 - `api-network.test.ts`: unhandled rejection `timeout: session closed` fires after all tests pass. Race in the vibium BiDi layer; harmless.
