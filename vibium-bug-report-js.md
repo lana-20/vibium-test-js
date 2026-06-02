@@ -1,7 +1,7 @@
 # Vibium JS Client — Bug Report
 
 **Package:** `vibium` JS client  
-**Version:** 26.3.18  
+**Version:** 26.3.18 (bugs filed) / 26.5.31 (Bug 1 and Bug 3 fixed — see status notes)  
 **Platform:** macOS x86_64 (Darwin 25.3.0)  
 **Node:** v25.8.0  
 **Test runner:** Vitest 2.1.9, `pool: forks`  
@@ -10,7 +10,9 @@
 
 ---
 
-## Bug 1 — `page.waitUntil(expression)` always times out *(VibiumDev/vibium#123)*
+## Bug 1 — `page.waitUntil(expression)` always times out *(VibiumDev/vibium#123)* — **FIXED v26.5.31**
+
+> **Status:** Fixed in v26.5.31 by PR #163. The engine now wraps bare expressions uniformly — both `"document.readyState === 'complete'"` and `"() => document.readyState === 'complete'"` resolve correctly. Regression tests un-skipped and passing.
 
 ### Summary
 
@@ -150,7 +152,9 @@ Expected result: 2 pass (baseline + workaround), 1 fail (the bug case).
 
 ---
 
-## Bug 3 — `clock.setFixedTime()` silently does nothing without prior `clock.install()` *(VibiumDev/vibium#125)*
+## Bug 3 — `clock.setFixedTime()` silently does nothing without prior `clock.install()` *(VibiumDev/vibium#125)* — **FIXED v26.5.31**
+
+> **Status:** Fixed in v26.5.31 by PR #163. Each clock op now guards and returns a clear error: `"clock not installed: call clock.install() before clock.setFixedTime()"` instead of silently succeeding. Note: Playwright-style standalone `setFixedTime()` (without `install()`) is still not supported — the fix adds an error guard, not standalone support.
 
 ### Summary
 
