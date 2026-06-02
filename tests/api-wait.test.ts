@@ -1,6 +1,6 @@
 /**
  * Coverage: waitUntil.url, waitUntil.loaded, waitUntil(expression), wait
- * Bug 1 (VibiumDev/vibium#123): waitUntil(expression) always times out — tests marked test.skip
+ * Bug 1 (VibiumDev/vibium#123): FIXED in v26.5.31 (#163) — bare expressions now accepted
  */
 import { expect } from 'vitest';
 import { test } from '../src';
@@ -26,7 +26,7 @@ test('wait pauses for the given milliseconds', async ({ page }) => {
 
 // BUG 1 — waitUntil(expression) times out even when expression is immediately true
 // (https://github.com/VibiumDev/vibium/issues/118)
-test.skip('bug1: waitUntil(expression) with immediately-true readyState — times out', async ({ page }) => {
+test('bug1 FIXED (#123/#163): waitUntil(expression) with immediately-true readyState — times out', async ({ page }) => {
   await page.go(URL);
   await page.waitUntil.url('shadowdom');
   await page.waitUntil(`document.readyState === "complete"`, { timeout: 5000 });
@@ -34,7 +34,7 @@ test.skip('bug1: waitUntil(expression) with immediately-true readyState — time
 });
 
 // BUG 1 — second repro: element already present on page
-test.skip('bug1: waitUntil(expression) with present element — times out', async ({ page }) => {
+test('bug1 FIXED (#123/#163): waitUntil(expression) with present element — times out', async ({ page }) => {
   await page.go(URL);
   await page.waitUntil(`!!document.querySelector('my-paragraph')`, { timeout: 5000 });
   expect(true).toBe(true);
