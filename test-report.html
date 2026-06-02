@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Report — vibium-test-js</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: #f0f4f8;
+    color: #1e293b;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 0 0 48px;
+  }
+
+  /* ── header ── */
+  .header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+    color: #f8fafc;
+    padding: 32px 40px 28px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .header-left h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+  .header-left .meta {
+    font-size: 12px;
+    color: #94a3b8;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    align-self: flex-start;
+  }
+  .badge.pass { background: #059669; color: #fff; }
+  .badge.fail { background: #dc2626; color: #fff; }
+
+  /* ── container ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── summary cards ── */
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin: 28px 0 20px;
+  }
+  @media (max-width: 800px) {
+    .summary { grid-template-columns: repeat(3, 1fr); }
+  }
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 18px 14px 14px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,.07);
+    border: 1px solid #e2e8f0;
+  }
+  .card .val {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .card .lbl {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #64748b;
+  }
+  .card.c-total .val { color: #1e293b; }
+  .card.c-pass  .val { color: #059669; }
+  .card.c-fail  .val { color: #dc2626; }
+  .card.c-skip  .val { color: #d97706; }
+  .card.c-dur   .val { color: #2563eb; font-size: 24px; }
+  .card.c-rate  .val { color: #059669; }
+
+  /* ── progress bar ── */
+  .progress-wrap {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.07);
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #059669;
+    width: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  /* ── section heading ── */
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #64748b;
+    margin-bottom: 10px;
+    padding-left: 2px;
+  }
+
+  /* ── suite ── */
+  .suite {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    overflow: hidden;
+  }
+  .suite.fail { border-left: 4px solid #dc2626; }
+  .suite.pass { border-left: 4px solid #059669; }
+
+  .suite-header {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 18px;
+    cursor: pointer;
+    user-select: none;
+    gap: 12px;
+  }
+  .suite-header::-webkit-details-marker { display: none; }
+  .suite-header::marker { display: none; }
+  .suite-header:hover { background: #f8fafc; }
+
+  .suite-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex: 1;
+  }
+  .suite-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .suite.pass .suite-icon { color: #059669; }
+  .suite.fail .suite-icon { color: #dc2626; }
+
+  .suite-file {
+    font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e293b;
+    flex-shrink: 0;
+  }
+  .suite-label {
+    font-size: 12px;
+    color: #94a3b8;
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .suite-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .suite-stat {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .suite-stat.pass { background: #d1fae5; color: #065f46; }
+  .suite-stat.fail { background: #fee2e2; color: #991b1b; }
+  .suite-dur {
+    font-size: 12px;
+    color: #64748b;
+    font-family: monospace;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  /* ── tests ── */
+  .tests { padding: 0 18px 10px; border-top: 1px solid #f1f5f9; }
+  .test-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 7px 0;
+    border-bottom: 1px solid #f8fafc;
+    gap: 12px;
+  }
+  .test-row:last-child { border-bottom: none; }
+  .test-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+  }
+  .icon {
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-weight: 700;
+  }
+  .icon.pass { color: #059669; }
+  .icon.fail { color: #dc2626; }
+  .icon.skip { color: #d97706; }
+  .test-name {
+    font-size: 13px;
+    color: #334155;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+  .test-dur {
+    font-size: 11px;
+    color: #94a3b8;
+    font-family: monospace;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .failure-msg {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 11px;
+    font-family: monospace;
+    color: #7f1d1d;
+    margin: 4px 0 8px 22px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-x: auto;
+  }
+
+  /* ── footer ── */
+  .footer {
+    text-align: center;
+    margin-top: 36px;
+    font-size: 11px;
+    color: #94a3b8;
+  }
+
+  /* ── print ── */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .header { background: #0f172a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    details { display: block; }
+    summary { cursor: default; }
+    .suite { box-shadow: none; page-break-inside: avoid; }
+    .progress-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Test Run Report — vibium-test-js</h1>
+    <div class="meta">
+      <span>📅 Apr 28, 2026, 09:11:45 PM</span>
+      <span>🗂 9 suites</span>
+      <span>⏱ 4.7m total</span>
+    </div>
+  </div>
+  <span class="badge pass">ALL PASSING</span>
+</div>
+
+<div class="container">
+
+  <div class="summary">
+    <div class="card c-total">
+      <div class="val">50</div>
+      <div class="lbl">Total</div>
+    </div>
+    <div class="card c-pass">
+      <div class="val">50</div>
+      <div class="lbl">Passed</div>
+    </div>
+    <div class="card c-fail">
+      <div class="val">0</div>
+      <div class="lbl">Failed</div>
+    </div>
+    <div class="card c-skip">
+      <div class="val">0</div>
+      <div class="lbl">Skipped</div>
+    </div>
+    <div class="card c-dur">
+      <div class="val">4.7m</div>
+      <div class="lbl">Duration</div>
+    </div>
+    <div class="card c-rate">
+      <div class="val">100%</div>
+      <div class="lbl">Pass rate</div>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Pass rate</span>
+      <span>50 / 50 tests passed</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+
+  <div class="section-title">Test Suites (9 passed)</div>
+
+  
+  <details class="suite pass" >
+    <summary class="suite-header">
+      <div class="suite-left">
+        <span class="suite-icon">✓</span>
+        <span class="suite-file">button-demo.test.ts</span>
+        <span class="suite-label">button demo</span>
+      </div>
+      <div class="suite-right">
+        <span class="suite-stat pass">5 passed</span>
+        <span class="suite-dur">31.8s</span>
+      </div>
+    </summary>
+    <div class="tests">
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">click counter increments on primary button click</span>
+        </div>
+        <span class="test-dur">3.2s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">primary button shows activated state after click</span>
+        </div>
+        <span class="test-dur">3.5s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">multiple button clicks accumulate in counter</span>
+        </div>
+        <span class="test-dur">14.0s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">disabled button is not enabled</span>
+        </div>
+        <span class="test-dur">2.6s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">reset clears counter and restores button labels</span>
+        </div>
+        <span class="test-dur">8.5s</span>
+      </div></div>
+  </details>
+
+  <details class="suite pass" >
+    <summary class="suite-header">
+      <div class="suite-left">
+        <span class="suite-icon">✓</span>
+        <span class="suite-file">checkbox-radio-demo.test.ts</span>
+        <span class="suite-label">checkbox radio demo</span>
+      </div>
+      <div class="suite-right">
+        <span class="suite-stat pass">6 passed</span>
+        <span class="suite-dur">17.6s</span>
+      </div>
+    </summary>
+    <div class="tests">
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">basic checkbox is unchecked initially</span>
+        </div>
+        <span class="test-dur">3.0s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">clicking checkbox toggles it to checked</span>
+        </div>
+        <span class="test-dur">3.3s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">clicking checked checkbox toggles it back to unchecked</span>
+        </div>
+        <span class="test-dur">2.7s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">selecting a plan radio deselects others</span>
+        </div>
+        <span class="test-dur">2.8s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">only one color radio can be selected at a time</span>
+        </div>
+        <span class="test-dur">3.0s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">newsletter preference checkbox is independent of others</span>
+        </div>
+        <span class="test-dur">2.7s</span>
+      </div></div>
+  </details>
+
+  <details class="suite pass" >
+    <summary class="suite-header">
+      <div class="suite-left">
+        <span class="suite-icon">✓</span>
+        <span class="suite-file">dropdown-demo.test.ts</span>
+        <span class="suite-label">dropdown demo</span>
+      </div>
+      <div class="suite-right">
+        <span class="suite-stat pass">3 passed</span>
+        <span class="suite-dur">11.2s</span>
+      </div>
+    </summary>
+    <div class="tests">
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">native select reflects chosen option</span>
+        </div>
+        <span class="test-dur">3.6s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">native select can switch between options</span>
+        </div>
+        <span class="test-dur">4.0s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">reset clears native select to default</span>
+        </div>
+        <span class="test-dur">3.6s</span>
+      </div></div>
+  </details>
+
+  <details class="suite pass" >
+    <summary class="suite-header">
+      <div class="suite-left">
+        <span class="suite-icon">✓</span>
+        <span class="suite-file">dynamic-demo.test.ts</span>
+        <span class="suite-label">dynamic demo</span>
+      </div>
+      <div class="suite-right">
+        <span class="suite-stat pass">5 passed</span>
+        <span class="suite-dur">39.1s</span>
+      </div>
+    </summary>
+    <div class="tests">
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">content area shows waiting message initially</span>
+        </div>
+        <span class="test-dur">3.0s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">load classified archives replaces placeholder with data</span>
+        </div>
+        <span class="test-dur">8.2s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">start monitoring shows active status in live feed</span>
+        </div>
+        <span class="test-dur">7.5s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">stop monitoring button halts signal updates</span>
+        </div>
+        <span class="test-dur">9.8s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">threat analysis produces a result</span>
+        </div>
+        <span class="test-dur">10.4s</span>
+      </div></div>
+  </details>
+
+  <details class="suite pass" >
+    <summary class="suite-header">
+      <div class="suite-left">
+        <span class="suite-icon">✓</span>
+        <span class="suite-file">login-demo.test.ts</span>
+        <span class="suite-label">login demo</span>
+      </div>
+      <div class="suite-right">
+        <span class="suite-stat pass">5 passed</span>
+        <span class="suite-dur">26.5s</span>
+      </div>
+    </summary>
+    <div class="tests">
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">valid credentials authenticate successfully</span>
+        </div>
+        <span class="test-dur">7.6s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">invalid credentials show access denied</span>
+        </div>
+        <span class="test-dur">6.7s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">attempt counter increments on each submit</span>
+        </div>
+        <span class="test-dur">6.9s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">load demo credentials fills username and password</span>
+        </div>
+        <span class="test-dur">2.7s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">reset clears form fields and status</span>
+        </div>
+        <span class="test-dur">2.6s</span>
+      </div></div>
+  </details>
+
+  <details class="suite pass" >
+    <summary class="suite-header">
+      <div class="suite-left">
+        <span class="suite-icon">✓</span>
+        <span class="suite-file">modal-demo.test.ts</span>
+        <span class="suite-label">modal demo</span>
+      </div>
+      <div class="suite-right">
+        <span class="suite-stat pass">5 passed</span>
+        <span class="suite-dur">26.8s</span>
+      </div>
+    </summary>
+    <div class="tests">
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">open mission briefing shows dialog</span>
+        </div>
+        <span class="test-dur">4.0s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">close button dismisses modal</span>
+        </div>
+        <span class="test-dur">6.2s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">acknowledge and close button also closes modal</span>
+        </div>
+        <span class="test-dur">8.6s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">interaction counter increments on modal open</span>
+        </div>
+        <span class="test-dur">4.8s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">form modal opens with mission creation form</span>
+        </div>
+        <span class="test-dur">3.2s</span>
+      </div></div>
+  </details>
+
+  <details class="suite pass" >
+    <summary class="suite-header">
+      <div class="suite-left">
+        <span class="suite-icon">✓</span>
+        <span class="suite-file">varparts-cart.test.ts</span>
+        <span class="suite-label">varparts cart</span>
+      </div>
+      <div class="suite-right">
+        <span class="suite-stat pass">7 passed</span>
+        <span class="suite-dur">40.4s</span>
+      </div>
+    </summary>
+    <div class="tests">
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">cart is empty on initial visit</span>
+        </div>
+        <span class="test-dur">2.6s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">Add to Cart shows success toast</span>
+        </div>
+        <span class="test-dur">4.9s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">cart badge increments after adding an item</span>
+        </div>
+        <span class="test-dur">4.6s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">cart shows added item when navigating via nav link</span>
+        </div>
+        <span class="test-dur">6.1s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">cart shows correct subtotal for added item</span>
+        </div>
+        <span class="test-dur">4.8s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">clear cart empties the cart</span>
+        </div>
+        <span class="test-dur">9.4s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">adding two different products shows 2 items in cart</span>
+        </div>
+        <span class="test-dur">8.1s</span>
+      </div></div>
+  </details>
+
+  <details class="suite pass" >
+    <summary class="suite-header">
+      <div class="suite-left">
+        <span class="suite-icon">✓</span>
+        <span class="suite-file">varparts-checkout.test.ts</span>
+        <span class="suite-label">varparts checkout</span>
+      </div>
+      <div class="suite-right">
+        <span class="suite-stat pass">7 passed</span>
+        <span class="suite-dur">1.1m</span>
+      </div>
+    </summary>
+    <div class="tests">
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">checkout page shows delivery address form</span>
+        </div>
+        <span class="test-dur">6.5s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">checkout page shows two shipping options</span>
+        </div>
+        <span class="test-dur">5.4s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">checkout shows order summary with correct item</span>
+        </div>
+        <span class="test-dur">5.4s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">filling delivery form and submitting reaches payment page</span>
+        </div>
+        <span class="test-dur">12.8s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">payment page has Pay Now button and order number</span>
+        </div>
+        <span class="test-dur">12.1s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">paying shows order confirmation</span>
+        </div>
+        <span class="test-dur">17.4s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">interplanetary shipping is selectable</span>
+        </div>
+        <span class="test-dur">6.1s</span>
+      </div></div>
+  </details>
+
+  <details class="suite pass" >
+    <summary class="suite-header">
+      <div class="suite-left">
+        <span class="suite-icon">✓</span>
+        <span class="suite-file">varparts-shop.test.ts</span>
+        <span class="suite-label">varparts shop</span>
+      </div>
+      <div class="suite-right">
+        <span class="suite-stat pass">7 passed</span>
+        <span class="suite-dur">23.2s</span>
+      </div>
+    </summary>
+    <div class="tests">
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">homepage shows product grid</span>
+        </div>
+        <span class="test-dur">3.0s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">each product card shows a name and price</span>
+        </div>
+        <span class="test-dur">2.9s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">clicking a product card navigates to its detail page</span>
+        </div>
+        <span class="test-dur">2.6s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">product detail page shows description and Add to Cart button</span>
+        </div>
+        <span class="test-dur">2.4s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">product detail page shows compatible components</span>
+        </div>
+        <span class="test-dur">2.2s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">about page loads with FAQ section</span>
+        </div>
+        <span class="test-dur">3.1s</span>
+      </div>
+      <div class="test-row pass">
+        <div class="test-left">
+          <span class="icon pass">✓</span>
+          <span class="test-name">nav links are present on every page</span>
+        </div>
+        <span class="test-dur">7.1s</span>
+      </div></div>
+  </details>
+
+  <div class="footer">
+    Generated by vibium-test-js · Apr 28, 2026, 09:11:45 PM
+  </div>
+
+</div>
+</body>
+</html>
