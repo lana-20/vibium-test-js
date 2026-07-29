@@ -56,8 +56,11 @@ test('context.clearStorage removes localStorage entries', async ({ context, page
   await page.evaluate<void>('localStorage.setItem("vibium-clear-test", "yes")');
   await context.clearStorage();
   await page.reload();
-  const val = await page.evaluate<string | null>('localStorage.getItem("vibium-clear-test")');
-  expect(val).toBeNull();
+  // JSON.stringify so an absent key returns the STRING "null". The client swallows
+  // JS exceptions and returns null (upstream #221), so a bare getItem + toBeNull()
+  // would pass just as readily if the evaluate had thrown.
+  const val = await page.evaluate<string>('JSON.stringify(localStorage.getItem("vibium-clear-test"))');
+  expect(val).toBe('null');
 });
 
 test('context.addInitScript runs before page scripts on next navigation', async ({ context, page }) => {
